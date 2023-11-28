@@ -15,8 +15,52 @@ type Response struct {
 	Attributes    map[AttributeType]Attribute
 }
 
+func NewResponse(txid TxID, addrPort netip.AddrPort) []byte {
+	if !addrPort.Addr().Is4() {
+		return nil
+	}
+
+	var (
+		buff   = make([]byte, 512)
+		offset = 0
+	)
+
+	binary.BigEndian.PutUint16(buff[:offset+2], BindingResponse)
+	offset += 2
+
+	binary.BigEndian.PutUint16(buff[offset:offset+2], 12)
+	offset += 2
+
+	binary.BigEndian.PutUint32(buff[offset:offset+4], MagicCookie)
+	offset += 2
+
+	copy(buff[offset:], txid)
+	offset += 12
+
+	binary.BigEndian.PutUint16(buff[offset:offset+2], uint16(MappedAddress))
+	offset += 2
+
+	binary.BigEndian.PutUint16(buff[offset:offset+2], 8)
+	offset += 2
+
+	buff[offset] = 0
+	offset++
+
+	binary.BigEndian.PutUint16(buff[offset:offset+2], uint16(ProtocolFamilyIPv4))
+	offset += 2
+
+	binary.BigEndian.PutUint16(buff[offset:offset+2], addrPort.Port())
+	offset += 2
+
+	ip := addrPort.Addr().As4()
+	copy(buff[offset:], ip[:])
+	offset += 4
+
+	return buff[:offset]
+}
+
 func UnmarshalResponse(buff []byte, resp *Response) (int, error) {
-	if len(buff) < 20 {
+	if len(buff) < ResponseHeaderSize {
 		return 0, errors.New("invalid stun response packet")
 	}
 

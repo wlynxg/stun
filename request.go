@@ -4,6 +4,8 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"io"
+
+	"github.com/pkg/errors"
 )
 
 type Request struct {
@@ -42,6 +44,32 @@ func MarshalRequest(req *Request) []byte {
 	}
 
 	return buff[:offset]
+}
+
+func UnmarshalRequest(buff []byte) (*Request, error) {
+	if len(buff) < ResponseHeaderSize {
+		return nil, errors.New("invalid stun response packet")
+	}
+
+	var (
+		req    = &Request{}
+		offset = 0
+	)
+
+	req.MessageType = binary.BigEndian.Uint16(buff[:2])
+	offset += 2
+
+	req.MessageLength = binary.BigEndian.Uint16(buff[offset : offset+2])
+	offset += 2
+
+	req.MagicCookie = binary.BigEndian.Uint32(buff[offset : offset+4])
+	offset += 4
+
+	txid := TxID{}
+	copy(txid, buff[offset:offset+12])
+	req.TransactionID = [12]byte(txid)
+
+	return req, nil
 }
 
 func NewRequest(action ChangeRequestAction) *Request {
