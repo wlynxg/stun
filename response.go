@@ -12,7 +12,7 @@ type Response struct {
 	MessageLength int
 	MagicCookie   uint32
 	TransactionID TxID
-	Attributes    map[AttributeType]Attribute
+	Attributes    map[AttributeType]IAttribute
 }
 
 func NewResponse(txid TxID, addrPort netip.AddrPort) []byte {
@@ -37,7 +37,7 @@ func NewResponse(txid TxID, addrPort netip.AddrPort) []byte {
 	copy(buff[offset:], txid)
 	offset += 12
 
-	binary.BigEndian.PutUint16(buff[offset:offset+2], uint16(MappedAddress))
+	binary.BigEndian.PutUint16(buff[offset:offset+2], uint16(AttrMappedAddress))
 	offset += 2
 
 	binary.BigEndian.PutUint16(buff[offset:offset+2], 8)
@@ -67,7 +67,7 @@ func UnmarshalResponse(buff []byte, resp *Response) (int, error) {
 	var offset = 0
 
 	if resp.Attributes == nil {
-		resp.Attributes = make(map[AttributeType]Attribute)
+		resp.Attributes = make(map[AttributeType]IAttribute)
 	}
 
 	// set the MessageType
@@ -91,7 +91,7 @@ func UnmarshalResponse(buff []byte, resp *Response) (int, error) {
 
 	old := offset
 	for offset-old < resp.MessageLength {
-		attribute := Attribute{}
+		attribute := IAttribute{}
 
 		// set AttributeType
 		attribute.Type = AttributeType(binary.BigEndian.Uint16(buff[offset : offset+2]))
@@ -102,7 +102,7 @@ func UnmarshalResponse(buff []byte, resp *Response) (int, error) {
 		offset += 2
 
 		// don't parse comprehension-option
-		if attribute.Type.IsComprehensionOptional() {
+		if attribute.Type.Optional() {
 			offset += attribute.Length
 			offset += attribute.Length % Padding
 		}

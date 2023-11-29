@@ -16,47 +16,6 @@ type RequestPacket struct {
 
 type TxID []byte
 
-type AttributeType uint16
-
-const (
-	MappedAddress    AttributeType = 0x0001
-	ChangeRequest    AttributeType = 0x0003
-	SourceAddress    AttributeType = 0x0004
-	ChangedAddress   AttributeType = 0x0005
-	Software         AttributeType = 0x8022
-	ResponseOrigin   AttributeType = 0x802b
-	OtherAddress     AttributeType = 0x802c
-	XorMappedAddress AttributeType = 0x0020
-)
-
-func (t AttributeType) IsComprehensionRequired() bool {
-	switch t {
-	case MappedAddress:
-		return true
-	default:
-		return false
-	}
-}
-
-func (t AttributeType) IsComprehensionOptional() bool {
-	return !t.IsComprehensionRequired()
-}
-
-func (t AttributeType) String() string {
-	switch t {
-	case MappedAddress:
-		return "MappedAddress"
-	case ResponseOrigin:
-		return "ResponseOrigin"
-	case OtherAddress:
-		return "OtherAddress"
-	case XorMappedAddress:
-		return "XorMappedAddress"
-	default:
-		return ""
-	}
-}
-
 type ProtocolFamily int
 
 const (
@@ -183,7 +142,7 @@ type Attributes struct {
 	XorMappedAddress net.UDPAddr
 }
 
-type Attribute struct {
+type IAttribute struct {
 	Type           AttributeType
 	Length         int
 	Reserved       int
