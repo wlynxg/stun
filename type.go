@@ -16,16 +16,19 @@ type RequestPacket struct {
 
 type TxID []byte
 
-type ProtocolFamily int
+type ProtocolFamily byte
 
 const (
 	ProtocolFamilyIPv4 ProtocolFamily = 1
+	ProtocolFamilyIPv6 ProtocolFamily = 2
 )
 
 func (p ProtocolFamily) String() string {
 	switch p {
 	case ProtocolFamilyIPv4:
 		return "IPv4"
+	case ProtocolFamilyIPv6:
+		return "IPv6"
 	default:
 		return ""
 	}
