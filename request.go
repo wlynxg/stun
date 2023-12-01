@@ -96,13 +96,13 @@ func NewRequest(action ChangeRequestAction) *Request {
 	switch action {
 	case ChangePort:
 		req.Attribute = &ActionAttribute{
-			Type:   ChangeRequest,
+			Type:   AttrChangeRequest,
 			Length: 4,
 			Action: ChangePort,
 		}
 	case ChangeIPAndPort:
 		req.Attribute = &ActionAttribute{
-			Type:   ChangeRequest,
+			Type:   AttrChangeRequest,
 			Length: 4,
 			Action: ChangeIPAndPort,
 		}
