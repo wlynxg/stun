@@ -87,6 +87,10 @@ type XORMappedAddress struct {
 }
 
 func (m *XORMappedAddress) Marshal(header *Header) ([]byte, error) {
+	if header == nil {
+		return nil, InvalidHeader
+	}
+
 	addrLength := 0
 	switch m.Family {
 	case ProtocolFamilyIPv4:
@@ -127,6 +131,10 @@ func (m *XORMappedAddress) Marshal(header *Header) ([]byte, error) {
 func (m *XORMappedAddress) Unmarshal(header *Header, buff []byte) error {
 	if len(buff) < 8 {
 		return InvalidData
+	}
+
+	if header == nil {
+		return InvalidHeader
 	}
 
 	f := ProtocolFamily(buff[1])
