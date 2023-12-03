@@ -88,8 +88,14 @@ type MappedAddress struct {
 }
 
 // ResponseAddress
-// https://datatracker.ietf.org/doc/html/rfc8489#section-14.1
+// https://datatracker.ietf.org/doc/html/rfc3489#section-11.2.2
 type ResponseAddress struct {
+	*baseAddrAttribute
+}
+
+// SourceAddress
+// https://datatracker.ietf.org/doc/html/rfc3489#section-11.2.5
+type SourceAddress struct {
 	*baseAddrAttribute
 }
 
