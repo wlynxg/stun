@@ -14,14 +14,13 @@ type AttributeValue interface {
 	Unmarshal(*Header, []byte) error
 }
 
-// MappedAddress https://datatracker.ietf.org/doc/html/rfc5389#section-15.1
-type MappedAddress struct {
+type baseAddrAttribute struct {
 	Family ProtocolFamily
 	Port   uint16
 	Addr   netip.Addr
 }
 
-func (m *MappedAddress) Marshal(*Header) ([]byte, error) {
+func (m *baseAddrAttribute) Marshal(*Header) ([]byte, error) {
 	var (
 		buff []byte
 	)
@@ -54,7 +53,7 @@ func (m *MappedAddress) Marshal(*Header) ([]byte, error) {
 	return buff, nil
 }
 
-func (m *MappedAddress) Unmarshal(header *Header, buff []byte) error {
+func (m *baseAddrAttribute) Unmarshal(header *Header, buff []byte) error {
 	if len(buff) < 8 {
 		return InvalidData
 	}
@@ -78,6 +77,20 @@ func (m *MappedAddress) Unmarshal(header *Header, buff []byte) error {
 	}
 	m.Addr = addr
 	return nil
+}
+
+// MappedAddress
+// https://datatracker.ietf.org/doc/html/rfc3489#section-11.2.1
+// https://datatracker.ietf.org/doc/html/rfc5389#autoid-39
+// https://datatracker.ietf.org/doc/html/rfc8489#section-14.1
+type MappedAddress struct {
+	*baseAddrAttribute
+}
+
+// ResponseAddress
+// https://datatracker.ietf.org/doc/html/rfc8489#section-14.1
+type ResponseAddress struct {
+	*baseAddrAttribute
 }
 
 type XORMappedAddress struct {

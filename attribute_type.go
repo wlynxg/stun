@@ -6,10 +6,15 @@ type AttributeType uint16
 const (
 	// AttrMappedAddress to AttrXORMappedAddress is from comprehension-required range (0x0000-0x7FFF)
 	AttrMappedAddress     AttributeType = 0x0001 // MAPPED-ADDRESS
+	AttrResponseAddress   AttributeType = 0x0002 // RESPONSE-ADDRESS
+	AttrChangeRequest     AttributeType = 0x0003 // CHANGE-REQUEST
+	AttrSourceAddress     AttributeType = 0x0004 // SOURCE-ADDRESS
+	AttrChangedAddress    AttributeType = 0x0005 // CHANGED-ADDRESS
 	AttrUsername          AttributeType = 0x0006 // USERNAME
 	AttrMessageIntegrity  AttributeType = 0x0008 // MESSAGE-INTEGRITY
 	AttrErrorCode         AttributeType = 0x0009 // ERROR-CODE
 	AttrUnknownAttributes AttributeType = 0x000A // UNKNOWN-ATTRIBUTES
+	AttrReflectedFrom     AttributeType = 0x000B // REFLECTED-FROM
 	AttrRealm             AttributeType = 0x0014 // REALM
 	AttrNonce             AttributeType = 0x0015 // NONCE
 	AttrXORMappedAddress  AttributeType = 0x0020 // XOR-MAPPED-ADDRESS
@@ -36,18 +41,12 @@ const (
 	AttrDontFragment       AttributeType = 0x001A // DONT-FRAGMENT
 	AttrReservationToken   AttributeType = 0x0022 // RESERVATION-TOKEN
 
-	// AttrChangeRequest to AttrOtherAddress is from RFC 5780 NAT Behavior Discovery
-	AttrChangeRequest  AttributeType = 0x0003 // CHANGE-REQUEST
+	// AttrPadding to AttrOtherAddress is from RFC 5780 NAT Behavior Discovery
 	AttrPadding        AttributeType = 0x0026 // PADDING
 	AttrResponsePort   AttributeType = 0x0027 // RESPONSE-PORT
 	AttrCacheTimeout   AttributeType = 0x8027 // CACHE-TIMEOUT
 	AttrResponseOrigin AttributeType = 0x802b // RESPONSE-ORIGIN
 	AttrOtherAddress   AttributeType = 0x802C // OTHER-ADDRESS
-
-	// AttrSourceAddress and AttrChangedAddress from RFC 3489, removed by RFC 5389,
-	// but still used by RFC5389-implementing software like Vovida.org, reTURNServer, etc.
-	AttrSourceAddress  AttributeType = 0x0004 // SOURCE-ADDRESS
-	AttrChangedAddress AttributeType = 0x0005 // CHANGED-ADDRESS
 
 	// AttrConnectionID from RFC 6062 TURN Extensions for TCP Allocations.
 	AttrConnectionID AttributeType = 0x002a // CONNECTION-ID
