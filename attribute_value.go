@@ -99,6 +99,12 @@ type SourceAddress struct {
 	*baseAddrAttribute
 }
 
+// ReflectedFrom
+// https://datatracker.ietf.org/doc/html/rfc3489#section-11.2.11
+type ReflectedFrom struct {
+	*baseAddrAttribute
+}
+
 type XORMappedAddress struct {
 	Family ProtocolFamily
 	Port   uint16
